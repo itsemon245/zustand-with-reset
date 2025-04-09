@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --external zustand",
     "prepublishOnly": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [
     "zustand",
@@ -36,8 +36,11 @@
   },
   "devDependencies": {
     "tsup": "^7.2.0",
-    "typescript": "^5.0.0",
-    "zustand": "^4.5.6"
+    "zustand": "^4.5.6",
+    "@types/jest": "^29.5.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.2"
   },
   "repository": {
     "type": "git",
