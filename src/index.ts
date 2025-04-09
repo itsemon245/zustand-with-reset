@@ -52,7 +52,7 @@ export type StoreWithReset<T> = T & {
  * // useCounterStore.getState().resetStore();
  * ```
  */
-export function createStore<T extends object>(
+export function createStoreWithReset<T extends object>(
   createState: StateCreator<T, [], []>
 ): UseBoundStore<StoreApi<StoreWithReset<T>>> {
   // Create a store with the state creator
