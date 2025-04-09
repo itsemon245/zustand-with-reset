@@ -1,0 +1,50 @@
+{
+  "name": "zustand-with-reset",
+  "version": "1.0.0",
+  "description": "Utility functions for creating Zustand stores with automatic reset functionality",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --external zustand",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "zustand",
+    "state-management",
+    "react",
+    "store",
+    "reset"
+  ],
+  "author": "Mojahidul Islam",
+  "license": "MIT",
+  "peerDependencies": {
+    "zustand": "^4.0.0"
+  },
+  "devDependencies": {
+    "tsup": "^7.2.0",
+    "typescript": "^5.0.0",
+    "zustand": "^4.5.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itsemon245/zustand-store-utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/itsemon245/zustand-store-utils/issues"
+  },
+  "homepage": "https://github.com/itsemon245/zustand-store-utils#readme"
+}
