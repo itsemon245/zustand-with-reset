@@ -2,8 +2,8 @@ name: Publish Package to NPM
 
 on:
   push:
-    tags:
-      - "v*" # This will trigger on any tag that starts with 'v', like v1.0.0
+    branches:
+      - "main"
   workflow_dispatch: # Allows manual triggering from GitHub UI
 
 jobs:
@@ -33,12 +33,7 @@ jobs:
 
       - name: Extract version from tag
         id: get_version
-        run: |
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-          else
-            echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
-          fi
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Set package version
         run: npm version ${{ steps.get_version.outputs.VERSION }} --no-git-tag-version
