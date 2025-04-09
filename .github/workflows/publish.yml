@@ -47,19 +47,19 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Create and push tag
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          # Check if tag exists locally before trying to delete it
-          if git tag | grep -q "^${{ steps.get_version.outputs.TAG }}$"; then
-            git tag -d ${{ steps.get_version.outputs.TAG }}
-          fi
-          git tag -a ${{ steps.get_version.outputs.TAG }} -m "Release ${{ steps.get_version.outputs.VERSION }}"
-          git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git ${{ steps.get_version.outputs.TAG }} --force
+      # - name: Create and push tag
+      #   run: |
+      #     git config --local user.email "action@github.com"
+      #     git config --local user.name "GitHub Action"
+      #     # Check if tag exists locally before trying to delete it
+      #     if git tag | grep -q "^${{ steps.get_version.outputs.TAG }}$"; then
+      #       git tag -d ${{ steps.get_version.outputs.TAG }}
+      #     fi
+      #     git tag -a ${{ steps.get_version.outputs.TAG }} -m "Release ${{ steps.get_version.outputs.VERSION }}"
+      #     git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git ${{ steps.get_version.outputs.TAG }} --force
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ steps.get_version.outputs.TAG }}
-          generate_release_notes: true
+      # - name: Create GitHub Release
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     tag_name: ${{ steps.get_version.outputs.TAG }}
+      #     generate_release_notes: true
