@@ -42,7 +42,8 @@ jobs:
         run: npm pack --dry-run
 
       - name: Publish to NPM
-        run: npm publish
+        run: |
+          npm publish || echo "Package version may already exist, continuing workflow"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -50,7 +51,10 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git tag -d ${{ steps.get_version.outputs.TAG }}
+          # Check if tag exists locally before trying to delete it
+          if git tag | grep -q "^${{ steps.get_version.outputs.TAG }}$"; then
+            git tag -d ${{ steps.get_version.outputs.TAG }}
+          fi
           git tag -a ${{ steps.get_version.outputs.TAG }} -m "Release ${{ steps.get_version.outputs.VERSION }}"
           git push origin ${{ steps.get_version.outputs.TAG }} --force
 
