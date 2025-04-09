@@ -33,10 +33,11 @@ bun add zustand-with-reset
 - Create a store with automatic reset functionality
 
 ```ts
-import { createStore } from "zustand-with-reset";
+import { createWithReset } from "zustand-with-reset";
 
-const store = createStore((set) => ({
+const store = createWithReset((set) => ({
   count: 0,
+  secondaryCount: 10,
   increment: () => set((state) => ({ count: state.count + 1 })),
 }));
 ```
@@ -48,7 +49,7 @@ const count = useStore((state) => state.count);
 const increment = useStore((state) => state.increment);
 ```
 
-- To reset the store
+- To reset the entire store
 
 ```ts
 const resetStore = useStore((state) => state.resetStore);
@@ -60,3 +61,16 @@ useEffect(() => {
   };
 }, []);
 ```
+
+- To reset specific state properties
+
+```ts
+const resetState = useStore((state) => state.resetState);
+//now reset only the count property 
+resetState("count");
+// or reset multiple properties
+resetState("count", "secondaryCount");
+// alternate syntax
+resetState(["count", "secondaryCount"]);
+```
+

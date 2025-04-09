@@ -11,48 +11,61 @@ export type Properties<T> = {
 };
 
 /**
- * Utility type that adds a resetStore function to any store type.
- * This ensures TypeScript knows the store has this function.
+ * Utility type that adds reset functions to any store type.
+ * This ensures TypeScript knows the store has these functions.
  * 
  * @template T - The original store type
  */
 export type StoreWithReset<T> = T & {
   /**
-   * Resets the store to its initial state.
-   * This function is automatically added by the createStore utility.
+   * Resets the entire store to its initial state.
+   * This function is automatically added by the createWithReset utility.
    */
   resetStore: () => void;
+  
+  /**
+   * Resets specific state properties to their initial values.
+   * @param keys - The keys of the state properties to reset (as a single key, multiple keys, or array of keys)
+   */
+  resetState: <K extends keyof Properties<T>>(...keys: (K | K[])[]) => void;
 };
 
 /**
- * Creates a Zustand store with automatic state management features:
+ * Creates a Zustand store with advanced reset functionality:
  * - Automatically extracts initial state from non-function properties
- * - Adds a resetStore function that resets to initial state
+ * - Adds resetStore function that resets to initial state (if not already defined)
+ * - Adds resetState function that resets specific state properties (if not already defined)
  * - Preserves the standard Zustand API and type safety
  * 
- * @template T - The type of the store state (without the resetStore function)
+ * @template T - The type of the store state (without the reset functions)
  * @param createState - A function that creates the store state and actions
- * @returns A Zustand store hook with resetStore functionality
+ * @returns A Zustand store hook with reset functionality
  * 
  * @example
  * ```typescript
  * interface CounterStore {
  *   count: number;
+ *   secondaryCount: number;
  *   increment: () => void;
  *   decrement: () => void;
  * }
  * 
- * const useCounterStore = createStore<CounterStore>((set) => ({
+ * const useCounterStore = createWithReset<CounterStore>((set) => ({
  *   count: 0,
+ *   secondaryCount: 10,
  *   increment: () => set(state => ({ count: state.count + 1 })),
  *   decrement: () => set(state => ({ count: state.count - 1 }))
  * }));
  * 
- * // The store now has a resetStore function
- * // useCounterStore.getState().resetStore();
+ * // Reset the entire store
+ * useCounterStore.getState().resetStore();
+ * 
+ * // Reset only specific properties
+ * useCounterStore.getState().resetState('count');
+ * useCounterStore.getState().resetState(['count', 'secondaryCount']);
  * ```
  */
-export function createStoreWithReset<T extends object>(
+export function createWithReset<T extends object>(
   createState: StateCreator<T, [], []>
 ): UseBoundStore<StoreApi<StoreWithReset<T>>> {
   // Create a store with the state creator
@@ -63,7 +76,7 @@ export function createStoreWithReset<T extends object>(
     // Extract non-function properties for the initial state
     const initialState: Partial<T> = {};
     
-    // Use Object.entries with proper type handling
+    // Use Object.keys with proper type handling
     Object.keys(state).forEach(key => {
       const k = key as keyof typeof state;
       if (typeof state[k] !== 'function') {
@@ -71,10 +84,31 @@ export function createStoreWithReset<T extends object>(
       }
     });
     
-    // Return the state with resetStore function
+    // Check if user has already defined reset functions
+    const userDefinedResetStore = 'resetStore' in state && typeof (state as any).resetStore === 'function';
+    const userDefinedResetState = 'resetState' in state && typeof (state as any).resetState === 'function';
+    
+    // Create default reset functions if not defined by user
+    const defaultResetStore = () => set(initialState as Partial<StoreWithReset<T>>);
+    const defaultResetState = <K extends keyof Properties<T>>(...keys: (K | K[])[]) => {
+      // Flatten the keys array (handles both individual keys and arrays of keys)
+      const keysToReset: K[] = keys.flat() as K[];
+      const resetValues: Partial<T> = {};
+      
+      keysToReset.forEach(key => {
+        if (key in initialState) {
+          resetValues[key] = initialState[key];
+        }
+      });
+      
+      set(resetValues as Partial<StoreWithReset<T>>);
+    };
+    
+    // Return the state with reset functions (using user-defined ones if available)
     return {
       ...state,
-      resetStore: () => set(initialState as Partial<StoreWithReset<T>>)
-    };
+      resetStore: userDefinedResetStore ? (state as any).resetStore : defaultResetStore,
+      resetState: userDefinedResetState ? (state as any).resetState : defaultResetState
+    } as StoreWithReset<T>;
   });
 } 
