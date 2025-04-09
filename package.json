@@ -1,6 +1,6 @@
 {
   "name": "zustand-with-reset",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Utility functions for creating Zustand stores with automatic reset functionality",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

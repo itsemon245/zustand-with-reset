@@ -50,6 +50,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          git tag -d ${{ steps.get_version.outputs.TAG }}
           git tag -a ${{ steps.get_version.outputs.TAG }} -m "Release ${{ steps.get_version.outputs.VERSION }}"
           git push origin ${{ steps.get_version.outputs.TAG }} --force
 
