@@ -4,25 +4,25 @@ A utility library for creating Zustand stores with automatic reset functionality
 
 ## Installation
 
-### NPM
+- **NPM**
 
 ```bash
 npm install zustand-with-reset
 ```
 
-### PNPM
+- **PNPM**
 
 ```bash
 pnpm add zustand-with-reset
 ```
 
-### Yarn
+- **Yarn**
 
 ```bash
 yarn add zustand-with-reset
 ```
 
-### Bun
+- **Bun**
 
 ```bash
 bun add zustand-with-reset

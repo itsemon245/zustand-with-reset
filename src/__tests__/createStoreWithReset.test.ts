@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { createStoreWithReset } from '../index';
 
 // Simple counter store type

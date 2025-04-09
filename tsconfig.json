@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2018",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "declaration": true,
     "strict": true,
     "esModuleInterop": true,
@@ -10,12 +10,7 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "dist",
     "lib": ["ES2018", "DOM"],
-    "jsx": "react",
-    "resolveJsonModule": true,
-    "baseUrl": ".",
-    "paths": {
-      "zustand": ["node_modules/zustand"]
-    }
+    "resolveJsonModule": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
