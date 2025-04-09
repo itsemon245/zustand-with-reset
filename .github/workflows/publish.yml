@@ -56,7 +56,7 @@ jobs:
             git tag -d ${{ steps.get_version.outputs.TAG }}
           fi
           git tag -a ${{ steps.get_version.outputs.TAG }} -m "Release ${{ steps.get_version.outputs.VERSION }}"
-          git push origin ${{ steps.get_version.outputs.TAG }} --force
+          git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git ${{ steps.get_version.outputs.TAG }} --force
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
